@@ -29,6 +29,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 The crate list and workspace-wide checks live in the root
 [README.md](README.md); read it rather than restating it here. Every crate is
 `no_std` and contains no `unsafe` code, which each crate root forbids.
+`tc_signer` needs no allocator; `tc_dsa` always uses `alloc`.
 
 `tc_signer` holds the contracts alone: `Signer` and `SignerInit<P>`, after
 Bouncy Castle's `ISigner`, and `SignerWithRecovery`, after
@@ -42,7 +43,26 @@ so the crate needs no allocator. A signature that does not verify is
 `Ok(false)`, not an error. The traits make no timing promise; each signer
 documents its own. The crate has no dependencies and no features.
 
+`tc_dsa` holds the DSA family's contracts after Bouncy Castle's `IDsa` and the
+parts its algorithms share. `Dsa` signs a hash as (r, s) and verifies such a
+pair, `DsaInit<P>` keys it, `DsaKCalculator` gives the secret k, and
+`DsaEncoding` writes (r, s) as bytes. `DsaDigestSigner` and
+`Gost3410DigestSigner` put a `Dsa` under `Signer`: they hash the message, sign
+the hash and encode the signature, as DER or plain, or as GOST's s ‖ r.
+`RandomDsaKCalculator` draws k at random and `HMacDsaKCalculator` follows RFC
+6979, rekeying before every draw after the first as 3.2 h.3 asks, where Bouncy
+Castle rekeys only after a k out of range. The encodings take DER strictly and
+bound an encoding by the order's maximum size before parsing it. Every
+algorithm, ECDSA and DSA among them, depends on this crate, so none of them can
+be a dependency of its tests: the examples and the signing tests live in the
+algorithm crates, and its own tests cover the encodings and the k calculators.
+`tests/documentation.rs` requires the digest signers' and the encodings'
+declarations to say "constant time" or "variable time", exactly one; the
+traits make no timing promise, and each k calculator states its own.
+
 Rust 1.85 is guaranteed for every build in the workspace, tests included.
+Besides `tc_*` crates, `tc_dsa` depends on `rand_core` and, through
+`tc_bigint`, `num-traits`, and its tests on `rand`; all build on 1.85.
 `.cargo/config.toml` sets `incompatible-rust-versions = "allow"` so
 `Cargo.lock` tracks the latest releases. Adding any third-party dependency or
 dev-dependency hands part of the 1.85 guarantee to that crate; raise it before

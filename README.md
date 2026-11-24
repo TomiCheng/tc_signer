@@ -2,7 +2,8 @@
 
 A Rust workspace for digital signatures after Bouncy Castle. It holds
 `tc_signer`, the contracts that every signature algorithm implements, the
-Rust form of Bouncy Castle's `ISigner` and `ISignerWithRecovery`. Each crate is
+Rust form of Bouncy Castle's `ISigner` and `ISignerWithRecovery`, and
+`tc_dsa`, the contracts and shared parts of the DSA family. Each crate is
 published separately and keeps its own README and changelog.
 
 [![CI](https://github.com/TomiCheng/tc_signer/actions/workflows/ci.yml/badge.svg)](https://github.com/TomiCheng/tc_signer/actions/workflows/ci.yml)
@@ -14,14 +15,17 @@ published separately and keeps its own README and changelog.
 | Crate | Version | Description |
 | --- | --- | --- |
 | [`tc_signer`](tc_signer) | [![crates.io](https://img.shields.io/crates/v/tc_signer.svg)](https://crates.io/crates/tc_signer) [![docs.rs](https://docs.rs/tc_signer/badge.svg)](https://docs.rs/tc_signer) | The `Signer`, `SignerInit` and `SignerWithRecovery` contracts, the Rust form of Bouncy Castle's `ISigner` and `ISignerWithRecovery`. `no_std`, no allocator, no dependencies, no `unsafe`. The traits make no timing promise; each signer states its own. |
+| [`tc_dsa`](tc_dsa) | [![crates.io](https://img.shields.io/crates/v/tc_dsa.svg)](https://crates.io/crates/tc_dsa) [![docs.rs](https://docs.rs/tc_dsa/badge.svg)](https://docs.rs/tc_dsa) | The DSA family's `Dsa`, `DsaInit`, `DsaKCalculator` and `DsaEncoding` contracts after Bouncy Castle's `IDsa`, the `DsaDigestSigner` and `Gost3410DigestSigner` that put an algorithm under `Signer`, the random and RFC 6979 k calculators, and the DER and plain encodings. `no_std` with `alloc`, no `unsafe`. The digest signers are constant time as far as the algorithm and the digest are; the encodings are variable time, for public signatures. |
 
 ## Requirements
 
-Rust 1.85 or later, edition 2024. Every crate builds without `std` and without
-an allocator.
+Rust 1.85 or later, edition 2024. Every crate builds without `std`;
+`tc_signer` needs no allocator, and `tc_dsa` always uses `alloc`.
 
 Rust 1.85 is the earliest compiler for edition 2024, and it is guaranteed for
-every build in this workspace, tests included. The workspace lock tracks the
+every build in this workspace, tests included. Besides `tc_*` crates, the
+libraries depend only on `rand_core` and `num-traits`, and the tests on
+`rand`, all of which build on 1.85. The workspace lock tracks the
 latest dependency releases, so CI on stable tests what a user on a current
 toolchain resolves.
 
@@ -48,8 +52,9 @@ cargo package -p <crate> --list --locked
 cargo publish -p <crate> --dry-run --locked
 ```
 
-The archive must include both license texts, the crate README, the changelog
-and the source, and no `target/` or other build artifacts.
+Publish `tc_signer` before `tc_dsa`. The archive must include both license
+texts, the crate README, the changelog, the source and, for `tc_dsa`, the
+integration tests, and no `target/` or other build artifacts.
 
 ## License
 
