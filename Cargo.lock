@@ -3,5 +3,186 @@
 version = 4
 
 [[package]]
+name = "autocfg"
+version = "1.5.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f2032f911046de80f0a198e0901378627c33f59ea0ac00e363d481118bd70a53"
+
+[[package]]
+name = "cfg-if"
+version = "1.0.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4e7648175b45a9a48536d676f68d918270699102aa8dab5496df06904c914600"
+
+[[package]]
+name = "chacha20"
+version = "0.10.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "65c35e4b699c7e15ccbe7ee35c005e4fc0a278d22238a2857e6ce2dadeda1b06"
+dependencies = [
+ "cfg-if",
+ "cpufeatures",
+ "rand_core",
+]
+
+[[package]]
+name = "cpufeatures"
+version = "0.3.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5ca28b0ae3115b884660db4118d803791fd6756b6e88f39c0f3f7859060d7566"
+dependencies = [
+ "libc",
+]
+
+[[package]]
+name = "getrandom"
+version = "0.4.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "300e883d756b2e4ec94e02791f39b04b522276138852cfc41d9fb7e904106099"
+dependencies = [
+ "cfg-if",
+ "libc",
+ "r-efi",
+ "rand_core",
+]
+
+[[package]]
+name = "libc"
+version = "0.2.191"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "65cd87c9a6d60536580b316ad985726104730a5151c99845f2490428ef91240a"
+
+[[package]]
+name = "num-traits"
+version = "0.2.19"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "071dfc062690e90b734c0b2273ce72ad0ffa95f0c74596bc250dcfd960262841"
+dependencies = [
+ "autocfg",
+]
+
+[[package]]
+name = "r-efi"
+version = "6.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f8dcc9c7d52a811697d2151c701e0d08956f92b0e24136cf4cf27b57a6a0d9bf"
+
+[[package]]
+name = "rand"
+version = "0.10.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8f6fa277c67e6ea590466f04c3fe82cb509f0864fe470643e5570de9514a9b11"
+dependencies = [
+ "chacha20",
+ "getrandom",
+ "rand_core",
+]
+
+[[package]]
+name = "rand_core"
+version = "0.10.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "63b8176103e19a2643978565ca18b50549f6101881c443590420e4dc998a3c69"
+
+[[package]]
+name = "tc_asn1"
+version = "0.1.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "fec6d951e16be715a44d8bc23087e1daae377720d81940af431eab81c5aacdb6"
+
+[[package]]
+name = "tc_asym_cipher"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3fa3176b9a4bad48d0a16f5d0315714a4a8cdaeaad7438361b3e2f8923ffb31b"
+
+[[package]]
+name = "tc_bigint"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6cb990fb0c0fd64e1007c824362db57d1c7ea53245ae12861f7569f93e6c142d"
+dependencies = [
+ "num-traits",
+ "rand_core",
+ "tc_constant_time",
+ "tc_zeroize",
+]
+
+[[package]]
+name = "tc_block_cipher"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b5c9a05f0da6a7be4ec50bc95a48c4b6e7abc6fbcae2f43c5009c96f5d32328d"
+dependencies = [
+ "tc_zeroize",
+]
+
+[[package]]
+name = "tc_block_modes"
+version = "0.1.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6ab2c1d0eba6c78b5a15a79aa3fedeed068843d1654afc25d472a63bb4f29daf"
+dependencies = [
+ "tc_block_cipher",
+ "tc_zeroize",
+]
+
+[[package]]
+name = "tc_constant_time"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0bcfe3e4732defe64408b706121575a0fdbd7011a3647566cd0a353daf64c165"
+
+[[package]]
+name = "tc_digest"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bf0a02b57924ef895bdedcc8f9d703e57caf831f578eeda6e97ed246e0fb59c6"
+
+[[package]]
+name = "tc_dsa"
+version = "0.1.0"
+dependencies = [
+ "rand",
+ "rand_core",
+ "tc_asn1",
+ "tc_asym_cipher",
+ "tc_bigint",
+ "tc_digest",
+ "tc_macs",
+ "tc_sha",
+ "tc_signer",
+ "tc_zeroize",
+]
+
+[[package]]
+name = "tc_macs"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c2cdad045880de68459b3cdd2654abf07f4faf336398bbe55c5d08ac906f122f"
+dependencies = [
+ "tc_block_cipher",
+ "tc_block_modes",
+ "tc_digest",
+ "tc_zeroize",
+]
+
+[[package]]
+name = "tc_sha"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2210d651adb5c6d7e72c787dfba177646f72954475eaf8b665a42c1ae06708cb"
+dependencies = [
+ "tc_digest",
+ "tc_zeroize",
+]
+
+[[package]]
 name = "tc_signer"
 version = "0.1.0"
+
+[[package]]
+name = "tc_zeroize"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9f496e361f9d75bd7cd0408dc585e9f334182314595ce27ea4852ab9c3858af1"
