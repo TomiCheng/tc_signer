@@ -80,7 +80,8 @@ jobs:
       - uses: Swatinem/rust-cache@v2
         env:
           RUSTUP_TOOLCHAIN: 1.85.0
-      # Every crate has no third-party dependency, so 1.85 covers the tests too.
+      # The third-party dependencies, rand_core and num-traits, and the rand of
+      # the tests all build on 1.85, so 1.85 covers the tests too.
       - run: cargo +1.85.0 test --locked
       - run: cargo +1.85.0 test --locked --all-features
 
@@ -102,7 +103,7 @@ jobs:
       - run: cargo clippy --locked --all-targets --all-features -- -D warnings
       - run: cargo doc --locked --no-deps
       - run: cargo doc --locked --no-deps --all-features
-      - run: cargo package --locked -p tc_signer
+      - run: cargo package --locked -p tc_signer -p tc_dsa
         env:
           # Keep unpacked package manifests outside rust-cache's build tree.
           CARGO_TARGET_DIR: ${{ runner.temp }}/package
@@ -135,4 +136,5 @@ jobs:
           # No dependency is platform-specific, so every target shares one set.
           for target in aarch64-unknown-none wasm32-unknown-unknown x86_64-unknown-linux-gnu i686-unknown-linux-gnu; do
             check 'tc_signer' -p tc_signer --target "$target"
+            check 'num-traits rand_core tc_asn1 tc_asym_cipher tc_bigint tc_block_cipher tc_constant_time tc_digest tc_dsa tc_macs tc_signer tc_zeroize' -p tc_dsa --target "$target"
           done
