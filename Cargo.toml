@@ -1,6 +1,6 @@
 [workspace]
 resolver = "3"
-members = ["tc_signer", "tc_dsa"]
+members = ["tc_signer", "tc_dsa", "tc_dsa_signer"]
 
 [workspace.package]
 edition = "2024"
