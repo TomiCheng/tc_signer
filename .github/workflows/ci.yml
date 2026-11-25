@@ -103,7 +103,7 @@ jobs:
       - run: cargo clippy --locked --all-targets --all-features -- -D warnings
       - run: cargo doc --locked --no-deps
       - run: cargo doc --locked --no-deps --all-features
-      - run: cargo package --locked -p tc_signer -p tc_dsa
+      - run: cargo package --locked -p tc_signer -p tc_dsa -p tc_dsa_signer
         env:
           # Keep unpacked package manifests outside rust-cache's build tree.
           CARGO_TARGET_DIR: ${{ runner.temp }}/package
@@ -137,4 +137,5 @@ jobs:
           for target in aarch64-unknown-none wasm32-unknown-unknown x86_64-unknown-linux-gnu i686-unknown-linux-gnu; do
             check 'tc_signer' -p tc_signer --target "$target"
             check 'num-traits rand_core tc_asn1 tc_asym_cipher tc_bigint tc_block_cipher tc_constant_time tc_digest tc_dsa tc_macs tc_signer tc_zeroize' -p tc_dsa --target "$target"
+            check 'num-traits rand_core tc_asn1 tc_asym_cipher tc_bigint tc_block_cipher tc_constant_time tc_digest tc_dsa tc_dsa_signer tc_macs tc_modular tc_prime tc_sha tc_signer tc_zeroize' -p tc_dsa_signer --target "$target"
           done
