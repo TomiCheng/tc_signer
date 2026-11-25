@@ -29,7 +29,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 The crate list and workspace-wide checks live in the root
 [README.md](README.md); read it rather than restating it here. Every crate is
 `no_std` and contains no `unsafe` code, which each crate root forbids.
-`tc_signer` needs no allocator; `tc_dsa` always uses `alloc`.
+`tc_signer` needs no allocator; `tc_dsa` and `tc_dsa_signer` always use
+`alloc`.
 
 `tc_signer` holds the contracts alone: `Signer` and `SignerInit<P>`, after
 Bouncy Castle's `ISigner`, and `SignerWithRecovery`, after
@@ -59,6 +60,19 @@ algorithm crates, and its own tests cover the encodings and the k calculators.
 `tests/documentation.rs` requires the digest signers' and the encodings'
 declarations to say "constant time" or "variable time", exactly one; the
 traits make no timing promise, and each k calculator states its own.
+
+`tc_dsa_signer` holds the DSA of FIPS 186 whole, after Bouncy Castle's DSA
+classes: `DsaParameters` and its validation data, the keys, `DsaGroupGenerator`,
+Bouncy Castle's `DsaParametersGenerator` under the name of `tc_dh_key`'s
+`DhGroupGenerator`, `DsaKeyPairGenerator`, and `DsaSigner`, which implements
+`Dsa` and `DsaInit` for both keys. The keys live with the signer rather than in
+a crate of their own because no other algorithm uses them; a key crate stands
+apart only when several algorithms share it, as `tc_dh_key` does. Parameters
+and keys are containers, checked by `validate`, which the generators' and the
+signer's `init` call. Beyond Bouncy Castle, the signer draws another k when r
+or s is zero, and `DsaPrivateKey::validate` checks the range of x. Its
+`tests/documentation.rs` reads every source file that declares a function and
+requires each declaration it lists to state its timing.
 
 Rust 1.85 is guaranteed for every build in the workspace, tests included.
 Besides `tc_*` crates, `tc_dsa` depends on `rand_core` and, through

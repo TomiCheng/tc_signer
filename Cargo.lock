@@ -156,6 +156,23 @@ dependencies = [
 ]
 
 [[package]]
+name = "tc_dsa_signer"
+version = "0.1.0"
+dependencies = [
+ "rand",
+ "rand_core",
+ "tc_asym_cipher",
+ "tc_bigint",
+ "tc_digest",
+ "tc_dsa",
+ "tc_modular",
+ "tc_prime",
+ "tc_sha",
+ "tc_signer",
+ "tc_zeroize",
+]
+
+[[package]]
 name = "tc_macs"
 version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -165,6 +182,30 @@ dependencies = [
  "tc_block_modes",
  "tc_digest",
  "tc_zeroize",
+]
+
+[[package]]
+name = "tc_modular"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "68d59abc2d37ce5a8c7ef18eccb18ed62505c4d9c795d8fe7d5c10418f24081c"
+dependencies = [
+ "num-traits",
+ "tc_bigint",
+ "tc_constant_time",
+ "tc_zeroize",
+]
+
+[[package]]
+name = "tc_prime"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "419e1857f48b50a9393eee195541d740fbcf63d124fec48df85cdcca5d6f508f"
+dependencies = [
+ "num-traits",
+ "rand_core",
+ "tc_bigint",
+ "tc_modular",
 ]
 
 [[package]]
